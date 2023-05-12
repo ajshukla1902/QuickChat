@@ -75,11 +75,12 @@ if (!io.listenerCount('connection')) {
             });
 
             socket.on("uploadChunk", (data: { buffer: ArrayBuffer, offset: number }) => {
-                console.log(`Received chunk: ${data.offset} - ${data.offset + data.buffer.byteLength}`);
-                socket.join("video-sharing");
-                receivedBuffers.push(data.buffer);
-                io.to("video-sharing").emit("video-received", data.buffer);
-                // writableStream.write(Buffer.from(data.buffer));
+                if(data && data.buffer && data.buffer.byteLength){
+                    console.log(`Received chunk: ${data.offset} - ${data.offset + data.buffer.byteLength}`);
+                    socket.join("video-sharing");
+                    receivedBuffers.push(data.buffer);
+                    io.to("video-sharing").emit("video-received", data.buffer);
+                }
             });
             
             socket.on("uploadComplete", () => {
