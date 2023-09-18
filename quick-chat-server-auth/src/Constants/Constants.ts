@@ -1,5 +1,5 @@
 export const CREDENTIALS_PATH = "/secrets/atse-2.json";
 
-export const PROJECT_ID = "atse-2-385716";
+export const PROJECT_ID = "burnished-flare-396308";
 
-export const BUCKET_NAME = "quick-chats";
+export const BUCKET_NAME = "quick-chats1";
