@@ -123,10 +123,10 @@ pipeline {
       	    steps {
 			    echo "Fetching External IP for Auth & Main Services.....[!]"
                 script{
-                    def authName = sh(script: "/var/lib/jenkins/bin/kubectl get service | awk '/auth/ {print \$4}' | tr -d "\n"", returnStdout: true)
+                    def authName = sh(script: "/var/lib/jenkins/bin/kubectl get service | awk '/auth/ {print \$4}' | tr -d '\n'", returnStdout: true)
                     def authEIP = sh(script: "dig +short ${authName} | head -n1", returnStdout: true)
 					echo "Auth EIP : ${authEIP}"    
-                    def mainName = sh(script: "/var/lib/jenkins/bin/kubectl get service | awk '/main/ {print \$4}' | tr -d "\n"", returnStdout: true)
+                    def mainName = sh(script: "/var/lib/jenkins/bin/kubectl get service | awk '/main/ {print \$4}' | tr -d '\n'", returnStdout: true)
                     def mainEIP = sh(script: "dig +short ${mainName} | head -n1", returnStdout: true)
 					echo "Main EIP : ${mainEIP}"
                 }
