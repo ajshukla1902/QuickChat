@@ -70,8 +70,10 @@ pipeline {
 			steps {
 				echo "Starting Auth Deployment..... [!]"
                 sh "kubectl apply -f quick-chat-server-auth/deployment.yaml"
-                def aPod = sh(script: "kubectl get pods", returnStdout: true)
-                echo "Output : ${aPod}"
+                script{
+                    def aPod = sh(script: "kubectl get pods", returnStdout: true)
+                    echo "Output : ${aPod}"
+                }
 				echo "Finished Auth Deployment..... [!]"
 			}
 		}
@@ -80,8 +82,10 @@ pipeline {
 			steps {
 				echo "Starting Main Deployment..... [!]"
                 sh "kubectl apply -f quick-chat-server-main/deployment.yaml"
-                def aPod = sh(script: "kubectl get pods", returnStdout: true)
-                echo "Output : ${aPod}"
+                script {
+                    def mPod = sh(script: "kubectl get pods", returnStdout: true)
+                    echo "Output : ${mPod}"
+                }
 				echo "Finished Main Deployment..... [!]"
 			}
 		}
@@ -118,10 +122,12 @@ pipeline {
         stage('Fetching Auth and Main EIP') {
       	    steps {
 			    echo "Fetching External IP for Auth & Main Services.....[!]"
-                def authEIP = sh(script: "kubectl get service | awk '/auth/ {print \$4}'", returnStdout: true)
-                echo "Auth EIP : ${authEIP}"    
-                def mainEIP = sh(script: "kubectl get service | awk '/main/ {print \$4}'", returnStdout: true)
-                echo "Main EIP : ${mainEIP}"
+                script{
+                    def authEIP = sh(script: "kubectl get service | awk '/auth/ {print \$4}'", returnStdout: true)
+                    echo "Auth EIP : ${authEIP}"    
+                    def mainEIP = sh(script: "kubectl get service | awk '/main/ {print \$4}'", returnStdout: true)
+                    echo "Main EIP : ${mainEIP}"
+                }
             }
 		}
 
@@ -137,9 +143,11 @@ pipeline {
 			steps {
 				echo "Starting React Deployment..... [!]"
 			    sh "kubectl apply -f deployment.yaml"
-                def rPod = sh(script: "kubectl get pods", returnStdout: true)
-                echo "Output : ${rPod}"
-				echo "Finished React Deployment..... [!]"
+                script{
+                    def rPod = sh(script: "kubectl get pods", returnStdout: true)
+                    echo "Output : ${rPod}"
+                }
+                echo "Finished React Deployment..... [!]"
 			}
 		}
 	}
