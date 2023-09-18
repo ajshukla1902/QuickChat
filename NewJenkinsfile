@@ -102,17 +102,20 @@ pipeline {
                     def mainName = sh(script: "/var/lib/jenkins/bin/kubectl get service | awk '/main/ {print \$4}' | tr -d '\n'", returnStdout: true)
                     def mainEIP = sh(script: "dig +short ${mainName} | head -n1 | tr -d '\n'", returnStdout: true)
 					echo "Main EIP : ${mainEIP}"
+					echo "Initiating Change.....[!]"
+			    	sh "sed -i 's/34.168.174.126/${mainEIP}/g' src/Constants/Constants.ts"
+                	sh "sed -i 's/35.233.134.93/${authEIP}/g' src/Constants/Constants.ts"
                 }
             }
 		}
 
-        stage('Editing EIP in Constants.ts') {
-      	    steps {
-			    echo "Initiating Change.....[!]"
-			    sh "sed -i 's/34.168.174.126/${mainEIP}/g' src/Constants/Constants.ts"
-                sh "sed -i 's/35.233.134.93/${authEIP}/g' src/Constants/Constants.ts"
-			}
-		}
+        // stage('Editing EIP in Constants.ts') {
+      	//     steps {
+		// 	    echo "Initiating Change.....[!]"
+		// 	    sh "sed -i 's/34.168.174.126/${mainEIP}/g' src/Constants/Constants.ts"
+        //         sh "sed -i 's/35.233.134.93/${authEIP}/g' src/Constants/Constants.ts"
+		// 	}
+		// }
 
         stage('Build Docker React Image') {
       	    steps {
