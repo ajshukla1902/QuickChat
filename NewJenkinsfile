@@ -120,7 +120,7 @@ pipeline {
 			    echo "Fetching External IP for Auth & Main Services.....[!]"
                 def authEIP = sh(script: "kubectl get service | awk '/auth/ {print \$4}'", returnStdout: true)
                 echo "Auth EIP : ${authEIP}"    
-                def mainEIP = sh(script: "kubectl get service | awk '/main/ {print $/4}'", returnStdout: true)
+                def mainEIP = sh(script: "kubectl get service | awk '/main/ {print \$4}'", returnStdout: true)
                 echo "Main EIP : ${mainEIP}"
             }
 		}
