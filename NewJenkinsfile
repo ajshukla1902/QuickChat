@@ -109,13 +109,6 @@ pipeline {
             }
 		}
 
-        // stage('Editing EIP in Constants.ts') {
-      	//     steps {
-		// 	    echo "Initiating Change.....[!]"
-		// 	    sh "sed -i 's/34.168.174.126/${mainEIP}/g' src/Constants/Constants.ts"
-        //         sh "sed -i 's/35.233.134.93/${authEIP}/g' src/Constants/Constants.ts"
-		// 	}
-		// }
 
         stage('Build Docker React Image') {
       	    steps {
@@ -153,6 +146,24 @@ pipeline {
                     echo "Output : ${rPod}"
                 }
                 echo "Finished React Deployment..... [!]"
+			}
+		}
+
+		stage('Deploy Prometheus & Grafana to EKS Cluster') {
+			steps {
+				echo "Starting Deployment with Helm..... [!]"
+			    sh "/usr/local/bin/helm repo add stable https://charts.helm.sh/stable"
+				sh "/usr/local/bin/helm repo add prometheus-community https://prometheus-community.github.io/helm-charts"
+				sh "/var/lib/jenkins/bin/kubectl create namespace prometheus"
+				sh "/usr/local/bin/helm install stable prometheus-community/kube-prometheus-stack -n prometheus"
+                script{
+                    def pgPod = sh(script: "/var/lib/jenkins/bin/kubectl get pods -n prometheus", returnStdout: true)
+                    echo "Output : ${pgPod}"
+					def pgSer = sh(script: "/var/lib/jenkins/bin/kubectl get svc -n prometheus", returnStdout: true)
+                    echo "Output : ${pgSer}"
+                }
+                echo "Finished Prometheus & Grafana Deployment..... [!]"
+				echo "Finished All Deployments..... [!]"
 			}
 		}
 	}
